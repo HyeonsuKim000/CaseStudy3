@@ -1,0 +1,137 @@
+---
+title: "CaseStudy3 - GPA Prediction using Linear Regression"
+output: html_document
+date: "2024-11-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Summary
+Student GPA data was downloaded from Kaggle with GPA as dependent variable from 2,392 students with multiple independent variables such as Absences, StudyTimeWeekly, Tutoring, ParentalSupport, ParentalEducation, Age, Gender, Ethnicity
+
+The goal of this project is to create a linear regression model that will to predict the GPA of a student given multiple independent variables as inputs.
+
+Based on the results below, the model generated with  Absences, StudyTimeWeekly, Tutoring, ParentalSupport, Age showed Coefficient of determination (R2) value of .93 and root mean squared error of prediction (RMSEP) of .24 indicating we do have a good linear regression model for GPA prediction.
+
+The Shiny Application takes multiple input variables and displays the predicted GPA value.
+In addition, the application shows a plot of predicted GPA values based on the selected variable to indicate the impact of the variable.
+
+
+### Loading packages that we will be using
+```{r, message=F, warning=F}
+library(dplyr)
+library(plsdepot)
+library(ggplot2)
+library(visreg)
+library(caret)
+```
+
+### Using Data from https://www.kaggle.com/code/joelknapp/student-performance-analysis
+Observed data size, variable types, ranges, etc.
+```{r, message=F, warning=F}
+studentData = read.csv("Data/Student_GPA_Data.csv")
+head(studentData)
+summary(studentData)
+```
+
+### Sample Data for Linear Regression with Correlation
+Observed high correlation with Absence followed by some correlation with Study hours.
+```{r, message=F, warning=F}
+p1 = qplot(StudyTimeWeekly, GPA, data=studentData) + geom_point(colour = "#3366FF", size = 3)
+p1 
+cor(studentData$StudyTimeWeekly, studentData$GPA)
+
+p2 = qplot(Absences, GPA, data=studentData) + geom_point(colour = "#3366FF", size = 3)
+p2 
+cor(studentData$Absences, studentData$GPA)
+
+```
+
+### Split the data as Training and Test sets
+```{r, message=F, warning=F, echo=F}
+set.seed(2015)
+splitStudents = caret::createDataPartition(studentData[,1], p = 0.8, list=F, times=1)
+trainStudents = studentData[splitStudents,]
+head(trainStudents)
+testStudents = studentData[!row.names(studentData) %in% row.names(trainStudents),]
+testStudents = studentData[-splitStudents,]
+```
+
+### Predict using many variables
+Observed close match between predicted and reference values.
+```{r}
+lr1 = lm(GPA ~ Absences+StudyTimeWeekly+Tutoring+ParentalSupport+ParentalEducation+Age+Gender+Ethnicity, data=trainStudents)
+summary(lr1)
+# predict(lr1, testStudents, level=.95, interval="confidence")
+predGPA = data.frame(predict(lr1, testStudents, level=.95, interval="confidence"))
+names(predGPA)[1] = 'Predicted'
+predGPA$Reference = testStudents[,c('GPA')]
+qplot(Reference, Predicted, data=predGPA) + geom_point(colour = "#3366FF", size = 3) + geom_errorbar(aes(ymin = lwr,ymax = upr))
+```
+
+### Visualizing using `visreg` package
+Observed some variables not impacting GPA.
+```{r}
+visreg::visreg(lr1)
+```
+
+
+### Predict using just the relevant variables (removed variables not adding value based on above)
+```{r}
+lr1 = lm(GPA ~ Absences+StudyTimeWeekly+Tutoring+ParentalSupport+Age, data=trainStudents)
+summary(lr1)
+# predict(lr1, testStudents, level=.95, interval="confidence")
+predGPA = data.frame(predict(lr1, testStudents, level=.95, interval="confidence"))
+names(predGPA)[1] = 'Predicted'
+predGPA$Reference = testStudents[,c('GPA')]
+qplot(Reference, Predicted, data=predGPA) + geom_point(colour = "#3366FF", size = 3) + geom_errorbar(aes(ymin = lwr,ymax = upr))
+
+new_data <- data.frame(
+        Age = 17,
+        Absences = 10,
+        Tutoring = 1,
+        ParentalSupport = 1,
+        StudyTimeWeekly = 20
+      )
+      
+ pred <- predict(lr1, new_data)
+ pred
+ 
+      
+      
+```
+
+
+
+### Model evaluation with $RMSEP$ and $R^{2}$
+* Calculating predicted residual sum of squares (PRESS) 
+$$PRESS = \sum_{i=1}^{n} (y^{ref}_{i}-y^{pred}_{i})^{2}$$
+   
+```{r}
+PRESS = sum((predGPA$Reference - predGPA$Predicted)^2)
+PRESS
+```
+
+* Root mean sqaured error of prediction (RMSEP)
+$$RMSEP = \sqrt{\frac{1}{n_{T}}\sum_{1}^{n_{T}} (y_{i}^{ref} - y_{i}^{pred})^{2}}$$
+```{r}
+
+RMSEP = sqrt(PRESS/ nrow(predGPA))
+RMSEP
+```
+
+* Total sum of squares (SST)
+$$SST = \sum_{i=1}^{n} (y^{ref}_{i}-y^{mean}_{i})^{2}$$
+```{r}
+SST = sum((predGPA$Reference - mean(predGPA$Reference))^2)
+SST
+```
+
+* Calculating $R^{2}$
+$$R^{2} = 1 - \frac{PRESS}{SST}$$
+```{r}
+R2 = 1 - (PRESS/SST)
+R2
+```
+### Result: coefficient of determination (R2) value of .93 and root mean squared error of prediction (RMSEP) of .24 indicates a good linear regression model for GPA prediction.
