@@ -358,22 +358,33 @@ Regression</h1>
 
 <div id="summary" class="section level3">
 <h3>Summary</h3>
-<p>Student GPA data was downloaded from Kaggle with GPA as dependent
-variable from 2,392 students with multiple independent variables such as
-Absences, StudyTimeWeekly, Tutoring, ParentalSupport, ParentalEducation,
-Age, Gender, Ethnicity</p>
-<p>The goal of this project is to create a linear regression model that
-will to predict the GPA of a student given multiple independent
-variables as inputs.</p>
-<p>Based on the results below, the model generated with Absences,
-StudyTimeWeekly, Tutoring, ParentalSupport, Age showed Coefficient of
-determination (R2) value of .93 and root mean squared error of
-prediction (RMSEP) of .24 indicating we do have a good linear regression
-model for GPA prediction.</p>
-<p>The Shiny Application takes multiple input variables and displays the
-predicted GPA value. In addition, the application shows a plot of
-predicted GPA values based on the selected variable to indicate the
-impact of the variable.</p>
+<p>Data: Student GPA data was downloaded from Kaggle with GPA as
+dependent variable from 2,392 students with multiple independent
+variables such as Absences, StudyTimeWeekly, Tutoring, ParentalSupport,
+ParentalEducation, Age, Gender, Ethnicity</p>
+<p>Motivation: The goal of this project is to create a linear regression
+model that will to predict the GPA of a student given multiple
+independent variables as inputs. This is interesting as it will serve as
+a motivation and visualition tool for many students who are struggling
+with the concept of studying. The output of this project will show what
+factors contribute to academic success and by how much.</p>
+<p>The analysis of the data: Visreg package was used to initially filter
+out variables that do not factor to reduce complexity of the UI and 5
+top factors. Afterwards, linear regression model was used to predict the
+GPA based on the input variables.</p>
+<p>Metrics for the model: Based on the results below, the model
+generated with Absences, StudyTimeWeekly, Tutoring, ParentalSupport, Age
+showed Coefficient of determination (R2) value of .93 and root mean
+squared error of prediction (RMSEP) of .24 indicating we do have a good
+linear regression model for GPA prediction.</p>
+<p>Output: The Shiny Application takes multiple input variables and
+displays the predicted GPA value. In addition, the application shows a
+plot of predicted GPA values based on the selected variable to indicate
+the impact of the variable. With the interaction of the application, we
+can see the impact of each of the factors in the order Absences,
+StudyTimeWeekly, Tutoring, ParentalSupport, and Age. The plot slows how
+much difference of an individual factor will have on the overall
+predicted GPA value.</p>
 </div>
 <div id="loading-packages-that-we-will-be-using" class="section level3">
 <h3>Loading packages that we will be using</h3>

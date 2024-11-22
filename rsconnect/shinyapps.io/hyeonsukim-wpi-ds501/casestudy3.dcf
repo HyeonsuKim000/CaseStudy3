@@ -5,9 +5,9 @@ account: hyeonsukim-wpi-ds501
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13425870
-bundleId: 9403481
+bundleId: 9403655
 url: https://hyeonsukim-wpi-ds501.shinyapps.io/casestudy3/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: CaseStudy3_Overview.html|CaseStudy3_Overview.Rmd|Data/student-scores.csv|shiny-hex.svg
+ignoredFiles: Data/student-scores.csv
