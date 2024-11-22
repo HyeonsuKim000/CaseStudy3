@@ -84,7 +84,7 @@ ui <- page_sidebar(
               h3("Visualize impact of a specific variable"),
               plotOutput("gpaPlot")
     ), 
-    nav_panel("Explaination", 
+    nav_panel("Explanation", 
               includeHTML("CaseStudy3_GPA.html")
     ), 
   ), 

@@ -25,6 +25,10 @@ The Shiny Application takes multiple input variables and displays the predicted 
 In addition, the application shows a plot of predicted GPA values based on the selected variable to indicate the impact of the variable.
 With the interaction of the application, we can see the impact of each of the factors in the order Absences, StudyTimeWeekly, Tutoring, ParentalSupport, and Age.  The plot slows how much difference of an individual factor will have on the overall predicted GPA value.
 
+GITHUB REPO: https://github.com/HyeonsuKim000/CaseStudy3
+
+Shiny App: https://hyeonsukim-wpi-ds501.shinyapps.io/casestudy3/
+
 
 
 ### Loading packages that we will be using
